@@ -1,0 +1,148 @@
+/* Admin Dashboard container */
+.admin-dashboard-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    background-color: #f4f4f9;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Admin Dashboard content */
+.admin-dashboard-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    flex: 1;
+    padding: 20px;
+    margin-top: 60px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.dashboard-navbar {
+    background-color: #01305f;
+    height: 60px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #01305f;
+    margin-bottom: 20px;
+}
+
+/* Buttons for actions */
+.admin-actions {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.action-button {
+    color: white;
+    background-color: #01305f;
+    border: none;
+    font-size: 16px;
+    padding: 5px 10px;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 5px;
+    min-width: 100px;
+
+    /* Lock the button size to prevent changes on hover */
+    box-sizing: border-box;
+    height: 40px;    /* Fixed height */
+    padding: 5px 10px; /* Padding consistent */
+    border: 2px solid transparent; /* Prevent size changes due to borders */
+    transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth color transitions */
+}
+
+/* Ensure the button does not change size when hovered */
+.action-button:hover {
+    background-color: #011f40; /* Darkens the button on hover */
+    border-color: transparent; /* Prevent any border changes */
+}
+
+.action-button:disabled {
+    background-color: grey;
+    cursor: not-allowed;
+}
+
+/* Table container */
+.table-container {
+    flex: 1;
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* Table styling */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.table thead {
+    background-color: #01305f;
+    color: white;
+    text-align: left;
+}
+
+.table th, .table td {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #f4f4f9;
+}
+
+.table tbody tr:hover {
+    background-color: #d9e6f2;
+}
+
+.table th {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.table td {
+    font-size: 14px;
+}
+
+/* Approved status styling */
+.status-approved {
+    color: green;
+    font-weight: bold;
+}
+
+/* Pending status styling */
+.status-pending {
+    color: orange;
+    font-weight: bold;
+}
+
+/* Denied status styling */
+.status-denied {
+    color: red;
+    font-weight: bold;
+}
+
+/* Highlight selected row */
+.selected-row {
+    background-color: #19bae2 !important;
+}
