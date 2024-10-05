@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import './LoginPage.css'; 
 import { Link, useNavigate } from 'react-router-dom';
+import moment from 'moment'; // Added from secondary file
 
 function LoginPage() {
   const [username, setUsername] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [remainingAttempts, setRemainingAttempts] = useState(null); // Added from secondary file
+  const [nextAttemptTime, setNextAttemptTime] = useState(null); // Added from secondary file
 
   const navigate = useNavigate();
 
@@ -36,7 +39,7 @@ function LoginPage() {
     }
 
     try {
-      // Update fetch request to use HTTPS and the correct port
+      // Using HTTPS and correct port
       const response = await fetch('https://localhost:3000/login', { 
         method: 'POST',
         headers: {
@@ -53,19 +56,30 @@ function LoginPage() {
 
       if (response.ok) {
         // Store the userId and fullName in sessionStorage
-        sessionStorage.setItem('userId', data.userId); // Assuming the backend returns userId
-        sessionStorage.setItem('fullName', username); // Store full name
+        sessionStorage.setItem('userId', data.userId); 
+        sessionStorage.setItem('fullName', username);
 
         // Check if the user is an admin
         if (data.isAdmin) {
-          // Redirect to admin dashboard
           navigate('/admin-dashboard');
         } else {
-          // Redirect to the user dashboard
           navigate('/user-dashboard');
         }
       } else {
         setErrorMessage(data.message); // Display error message
+        setRemainingAttempts(data.remainingAttempts); // Added from secondary file
+
+        if (data.nextValidRequestDate) { // Added from secondary file
+          const nextAttempt = moment(data.nextValidRequestDate, 'MMMM Do YYYY, h:mm:ss a');
+          if (nextAttempt.isValid()) {
+            const timeUntilNextAttempt = moment.duration(nextAttempt.diff(moment()));
+            setNextAttemptTime(`Try again in ${timeUntilNextAttempt.humanize()}`);
+          } else {
+            setNextAttemptTime('Try again later');
+          }
+        } else {
+          setNextAttemptTime(null);
+        }
       }
     } catch (error) {
       setErrorMessage('Something went wrong. Please try again.');
@@ -113,9 +127,15 @@ function LoginPage() {
           />
         </div>
         
-        {errorMessage && <p className="error-message" style={{ display: 'block' }}>{errorMessage}</p>}
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
+        {remainingAttempts !== null && remainingAttempts > 0 && ( // Added from secondary file
+          <p className="attempts-message">Remaining attempts: {remainingAttempts}</p>
+        )}
+        {nextAttemptTime && ( // Added from secondary file
+          <p className="blocked-message">{nextAttemptTime}</p>
+        )}
 
-        <button type="submit">Login</button>
+        <button type="submit" disabled={nextAttemptTime !== null}>Login</button>
       </form>
       <p>Don't have an account? <Link to="/register">Register</Link></p>
     </div>
