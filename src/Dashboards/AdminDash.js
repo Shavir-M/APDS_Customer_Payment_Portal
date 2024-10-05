@@ -24,13 +24,13 @@ function AdminDashboard() {
     // Cleanup interval when the component unmounts
     return () => {
       document.body.classList.remove('dashboard-body');
-      clearInterval(interval); // Clear the interval to avoid memory leaks
+      clearInterval(interval); 
     };
   }, []);
 
   const fetchPayments = async () => {
     try {
-      const response = await fetch('http://localhost:5000/admin/payments');
+      const response = await fetch('https://localhost:3000/admin/payments');
       const data = await response.json();
       if (response.ok) {
         setPayments(data);
@@ -58,8 +58,8 @@ function AdminDashboard() {
     if (!selectedPayment) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/admin/payments/${selectedPayment._id}`, {
-        method: 'PATCH', // Use PATCH for partial updates
+      const response = await fetch(`https://localhost:3000/admin/payments/${selectedPayment._id}`, {
+        method: 'PATCH', 
         headers: {
           'Content-Type': 'application/json',
         },
@@ -67,8 +67,8 @@ function AdminDashboard() {
       });
 
       if (response.ok) {
-        fetchPayments(); // Refresh payments to reflect the changes
-        setSelectedPayment(null); // Deselect the payment after approval
+        fetchPayments(); 
+        setSelectedPayment(null); 
       }
     } catch (error) {
       console.error('Error approving payment:', error);
@@ -80,7 +80,7 @@ function AdminDashboard() {
     if (!selectedPayment) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/admin/payments/${selectedPayment._id}`, {
+      const response = await fetch(`https://localhost:3000/admin/payments/${selectedPayment._id}`, {
         method: 'PATCH', // Use PATCH for partial updates
         headers: {
           'Content-Type': 'application/json',

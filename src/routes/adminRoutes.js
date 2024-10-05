@@ -25,4 +25,24 @@ router.get('/payments', async (req, res) => {
   }
 });
 
+// PATCH route to update payment status (Approve/Deny)
+router.patch('/payments/:id', async (req, res) => {
+  const { id } = req.params; // Get the payment ID from the URL
+  const { status } = req.body; // Get the status (Approved/Denied) from the request body
+
+  try {
+    // Find the payment by ID and update the status
+    const payment = await Payment.findByIdAndUpdate(id, { status }, { new: true });
+
+    if (!payment) {
+      return res.status(404).json({ message: 'Payment not found' });
+    }
+
+    res.status(200).json({ message: 'Payment status updated successfully', payment });
+  } catch (error) {
+    console.error('Error updating payment status:', error);
+    res.status(500).json({ message: 'Error updating payment status' });
+  }
+});
+
 module.exports = router;

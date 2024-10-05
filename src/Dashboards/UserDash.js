@@ -37,7 +37,7 @@ function UserDash() {
 
   const fetchPayments = async (userId) => {
     try {
-      const response = await fetch(`http://localhost:5000/payments/${userId}`);
+      const response = await fetch(`https://localhost:3000/payments/${userId}`);
       const data = await response.json();
       if (response.ok) {
         setPayments(data); // Update the payments state with fetched data
@@ -111,7 +111,7 @@ function UserDash() {
     };
 
     try {
-      const response = await fetch(`http://localhost:5000/payments/submit`, {
+      const response = await fetch(`https://localhost:3000/payments/submit`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

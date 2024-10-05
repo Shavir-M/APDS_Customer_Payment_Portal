@@ -60,19 +60,16 @@ h2 {
     text-align: center;
     border-radius: 5px;
     min-width: 100px;
-
-    /* Lock the button size to prevent changes on hover */
     box-sizing: border-box;
-    height: 40px;    /* Fixed height */
-    padding: 5px 10px; /* Padding consistent */
-    border: 2px solid transparent; /* Prevent size changes due to borders */
-    transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth color transitions */
+    height: 40px;    
+    padding: 5px 10px; 
+    border: 2px solid transparent; 
+    transition: background-color 0.3s ease, border-color 0.3s ease; 
 }
 
-/* Ensure the button does not change size when hovered */
 .action-button:hover {
-    background-color: #011f40; /* Darkens the button on hover */
-    border-color: transparent; /* Prevent any border changes */
+    background-color: #011f40; 
+    border-color: transparent; 
 }
 
 .action-button:disabled {

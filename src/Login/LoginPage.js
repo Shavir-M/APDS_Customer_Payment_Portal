@@ -36,7 +36,8 @@ function LoginPage() {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/login', {
+      // Update fetch request to use HTTPS and the correct port
+      const response = await fetch('https://localhost:3000/login', { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -67,7 +68,7 @@ function LoginPage() {
         setErrorMessage(data.message); // Display error message
       }
     } catch (error) {
-      setErrorMessage('Something went wrong');
+      setErrorMessage('Something went wrong. Please try again.');
     }
   };
 
