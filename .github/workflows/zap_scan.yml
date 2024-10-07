@@ -17,11 +17,11 @@ jobs:
 
     - name: Set up Docker and Run ZAP Scan
       run: |
-        docker pull owasp/zap2docker-stable:v2.11.1
-        docker run --user root -v ${{ github.workspace }}:/zap/wrk/:rw --network=host -t owasp/zap2docker-stable:v2.11.1 zap-baseline.py -t https://www.zaproxy.org/ -J report_json.json -w report_md.md -r report_html.html
+        docker pull owasp/zap2docker-weekly  # Use the weekly updated ZAP image
+        docker run --user root -v ${{ github.workspace }}:/zap/wrk/:rw --network=host -t owasp/zap2docker-weekly zap-baseline.py -t https://www.zaproxy.org/ -J report_json.json -w report_md.md -r report_html.html
 
     - name: Upload ZAP Report as Artifact
-      uses: actions/upload-artifact@v3  # Use the latest v3 of the upload-artifact action
+      uses: actions/upload-artifact@v3  # Use the latest version of the artifact upload action
       with:
         name: zap-report
         path: |
