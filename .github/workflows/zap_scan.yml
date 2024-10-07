@@ -1,0 +1,17 @@
+name: "ZAP Scan on Main Branch Update"
+
+on:
+  push:
+    branches: [ "main" ]    # Runs when code is pushed to main branch
+  pull_request:
+    branches: [ "main" ]    # Runs on pull requests targeting main branch
+
+jobs:
+  zap_scan:
+    runs-on: ubuntu-latest
+    name: Scan ZAP website
+    steps:
+      - name: ZAP Scan
+        uses: zaproxy/action-baseline@v0.3.0
+        with:
+          target: 'https://www.zaproxy.org/'
