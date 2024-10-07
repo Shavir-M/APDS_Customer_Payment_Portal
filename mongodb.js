@@ -6,13 +6,6 @@ console.log("Session Secret:", process.env.SESSION_SECRET);
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-<<<<<<< Updated upstream
-const bcrypt = require('bcrypt'); // Import bcrypt for hashing
-const User = require('./src/models/User'); // Import the User model
-const Payment = require('./src/models/Payment'); // Import the Payment model
-const paymentRoutes = require('./src/routes/paymentRoutes'); // Import payment routes
-const adminRoutes = require('./src/routes/adminRoutes');
-=======
 const bcrypt = require('bcrypt');
 const helmet = require('helmet');
 const fs = require('fs');
@@ -31,14 +24,11 @@ const User = require('./src/models/User');
 const Payment = require('./src/models/Payment');
 const adminRoutes = require('./src/routes/adminRoutes');
 const paymentRoutes = require('./src/routes/paymentRoutes');
->>>>>>> Stashed changes
 
 const app = express();
+
+// Middleware
 app.use(express.json());
-<<<<<<< Updated upstream
-app.use(cors());
-app.use('/admin', adminRoutes);
-=======
 app.use(helmet({
   frameguard: { action: 'deny' },  // Prevent clickjacking
   contentSecurityPolicy: {
@@ -54,7 +44,6 @@ app.use(cors({
   origin: 'https://localhost:3000',
   credentials: true,
 }));
->>>>>>> Stashed changes
 
 // Secure session management
 app.use(session({
@@ -95,14 +84,6 @@ mongoose.connect('mongodb+srv://rylanthomas614:Poespoes123@zero.wmruq.mongodb.ne
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.log('Error connecting to MongoDB: ', err));
 
-<<<<<<< Updated upstream
-// Register route with password hashing
-app.post('/register', async (req, res) => {
-  const { fullName, idNumber, accountNumber, password } = req.body;
-
-  // Basic validation
-  if (!fullName || !idNumber || !accountNumber || !password) {
-=======
 // Express Brute (for brute force protection)
 const model = mongoose.model("bruteforce", BruteForceSchema);
 const store = new MongooseStore(model);
@@ -133,12 +114,10 @@ app.post('/register', async (req, res) => {
   const sanitizedAccountNumber = xss(accountNumber);
 
   if (!sanitizedFullName || !sanitizedIdNumber || !sanitizedAccountNumber || !password) {
->>>>>>> Stashed changes
     return res.status(400).json({ message: 'All fields are required' });
   }
 
   try {
-    // Check if the user already exists (by ID number or Account number)
     const existingUser = await User.findOne({
       $or: [{ idNumber: sanitizedIdNumber }, { accountNumber: sanitizedAccountNumber }]
     });
@@ -147,77 +126,70 @@ app.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'User with this ID number or Account number already exists' });
     }
 
-    // Hash the password before storing it in the database
-    const hashedPassword = await bcrypt.hash(password, 10); // 10 salt rounds
+    // Hash the user's password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create new user
+    // Register the new user
     const newUser = new User({
-<<<<<<< Updated upstream
-      fullName,
-      idNumber,
-      accountNumber,
-      password: hashedPassword // Store the hashed password
-=======
       fullName: sanitizedFullName,
       idNumber: sanitizedIdNumber,
       accountNumber: sanitizedAccountNumber,
       password: hashedPassword
->>>>>>> Stashed changes
     });
 
-    // Save the user to the database
     await newUser.save();
 
-    // Send success response
     res.status(201).json({ message: 'User registered successfully', userId: newUser._id });
-
   } catch (error) {
     console.error('Error registering user: ', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
 
-// Login route with password comparison
-app.post('/login', async (req, res) => {
+// Login route with brute force protection
+app.post('/login', bruteforce.getMiddleware({
+  key: function (req, res, next) {
+    next(req.ip);
+  }
+}), async (req, res) => {
   const { username, accountNumber, password } = req.body;
 
-<<<<<<< Updated upstream
-  // Basic validation
-  if (!username || !accountNumber || !password) {
-=======
   // Sanitize input
   const sanitizedUsername = xss(username);
   const sanitizedAccountNumber = xss(accountNumber);
 
   if (!sanitizedUsername || !sanitizedAccountNumber || !password) {
->>>>>>> Stashed changes
     return res.status(400).json({ message: 'All fields are required' });
   }
 
   try {
-<<<<<<< Updated upstream
-    // Find the user by full name (username) and account number
-    const user = await User.findOne({ fullName: username, accountNumber });
-=======
     const user = await User.findOne({ fullName: sanitizedUsername, accountNumber: sanitizedAccountNumber });
->>>>>>> Stashed changes
+
+    const count = req.brute.count;
+    const remainingAttempts = Math.max(0, bruteforce.freeRetries - count);
 
     if (!user) {
-      return res.status(404).json({ message: 'Account does not exist' });
+      return res.status(404).json({
+        message: 'Account does not exist',
+        remainingAttempts: remainingAttempts
+      });
     }
 
-    // Compare the entered password with the hashed password in the database
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(401).json({ message: 'Invalid username, account number, or password' });
+      return res.status(401).json({
+        message: 'Invalid username, account number, or password',
+        remainingAttempts: remainingAttempts
+      });
     }
 
-    // If successful, return success message and userId
+    req.brute.reset();
+
     res.status(200).json({
       message: 'Logged in successfully',
       userId: user._id,
-      isAdmin: user.isAdmin // Add the isAdmin field to the response
+      isAdmin: user.isAdmin
     });
   } catch (error) {
     console.error('Error during login: ', error);
@@ -238,23 +210,7 @@ app.post('/payments/submit', async (req, res) => {
       return res.status(400).json({ message: 'User is not authenticated' });
   }
 
-  // Create a new payment associated with the logged-in user
   const newPayment = new Payment({
-<<<<<<< Updated upstream
-    userId, // Attach the userId to the payment
-    amount,
-    currency,
-    provider,
-    recipientAccount,
-    swiftCode,
-    date: new Date(), // Record the current date
-    status: 'pending' // Default status is 'pending'
-  });
-
-  try {
-    await newPayment.save(); // Save the payment in the database
-    res.status(201).json({ message: 'Payment submitted successfully' });
-=======
       userId,
       amount,
       currency,
@@ -268,7 +224,6 @@ app.post('/payments/submit', async (req, res) => {
   try {
       await newPayment.save();
       res.status(201).json({ message: 'Payment submitted successfully' });
->>>>>>> Stashed changes
   } catch (error) {
       console.error('Error saving payment:', error);
       res.status(500).json({ message: 'Failed to submit payment' });
@@ -279,26 +234,6 @@ app.post('/payments/submit', async (req, res) => {
 app.get('/payments/:userId', async (req, res) => {
     const { userId } = req.params;
 
-<<<<<<< Updated upstream
-  try {
-    const payments = await Payment.find({ userId }).sort({ date: -1 }); // Fetch payments and sort by date
-    res.status(200).json(payments);
-  } catch (error) {
-    console.error('Error fetching payments:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
-
-// Update payment status by ID
-app.patch('/admin/payments/:id', async (req, res) => {
-  const { id } = req.params;
-  const { status } = req.body;
-
-  try {
-    const payment = await Payment.findByIdAndUpdate(id, { status }, { new: true });
-    if (!payment) {
-      return res.status(404).json({ message: 'Payment not found' });
-=======
     // Validate the userId as a valid MongoDB ObjectId
     if (!mongoose.Types.ObjectId.isValid(userId)) {
         return res.status(400).json({ message: 'Invalid userId format' });
@@ -310,23 +245,16 @@ app.patch('/admin/payments/:id', async (req, res) => {
     } catch (error) {
         console.error('Error fetching payments:', error);
         res.status(500).json({ message: 'Internal server error' });
->>>>>>> Stashed changes
     }
 });
 
-<<<<<<< Updated upstream
-// Start server
-const PORT = 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-=======
 // Serve static files from the React app build directory
 app.use(express.static(path.join(__dirname, 'build')));
 
 // Catch-all route to serve the React frontend's `index.html`
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+});1
 
 // SSL certificate and private key
 const sslKey = fs.readFileSync(path.join('C:/Program Files/OpenSSL-Win64/bin/APDS.key'), 'utf8');
@@ -347,5 +275,4 @@ app.listen(httpPort, () => {
 
 https.createServer(options, app).listen(httpsPort, () => {
   console.log(`HTTPS server running on https://localhost:${httpsPort}`);
->>>>>>> Stashed changes
 });
