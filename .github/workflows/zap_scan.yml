@@ -10,8 +10,28 @@ jobs:
   zap_scan:
     runs-on: ubuntu-latest
     name: Scan ZAP website
+
     steps:
-      - name: ZAP Scan
-        uses: zaproxy/action-baseline@v0.3.0
-        with:
-          target: 'https://www.zaproxy.org/'
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: ZAP Scan
+      uses: zaproxy/action-baseline@v0.3.0
+      with:
+        target: 'https://www.zaproxy.org/'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Using a specific version of the ZAP Docker image
+      run: |
+        docker pull owasp/zap2docker-stable:v2.11.1
+        docker run --user root -v ${{ github.workspace }}:/zap/wrk/:rw --network=host -t owasp/zap2docker-stable:v2.11.1 zap-baseline.py -t https://www.zaproxy.org/ -J report_json.json -w report_md.md -r report_html.html
+
+    - name: Upload ZAP Report as Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: zap-report
+        path: |
+          report_json.json
+          report_md.md
+          report_html.html
