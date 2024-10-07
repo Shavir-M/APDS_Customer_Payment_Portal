@@ -2,29 +2,20 @@ name: "ZAP Scan on Main Branch Update"
 
 on:
   push:
-    branches: [ "main" ]    # Runs when code is pushed to main branch
+    branches: [ "main" ]    # Run the scan when code is pushed to the main branch
   pull_request:
-    branches: [ "main" ]    # Runs on pull requests targeting main branch
+    branches: [ "main" ]    # Run the scan when a pull request is opened or updated targeting the main branch
 
 jobs:
   zap_scan:
-    runs-on: ubuntu-latest
-    name: Scan ZAP website
+    runs-on: ubuntu-latest   # Use the ubuntu-latest runner
+    name: Perform ZAP Full Scan
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4    # Checkout the repository to ensure the runner has access to the code
 
-    - name: Set up Docker and Run ZAP Scan
-      run: |
-        docker pull owasp/zap2docker-weekly  # Use the weekly updated ZAP image
-        docker run --user root -v ${{ github.workspace }}:/zap/wrk/:rw --network=host -t owasp/zap2docker-weekly zap-baseline.py -t https://www.zaproxy.org/ -J report_json.json -w report_md.md -r report_html.html
-
-    - name: Upload ZAP Report as Artifact
-      uses: actions/upload-artifact@v3  # Use the latest version of the artifact upload action
+    - name: ZAP Full Scan
+      uses: zaproxy/action-full-scan@v0.11.0    # Run the ZAP full scan action
       with:
-        name: zap-report
-        path: |
-          report_json.json
-          report_md.md
-          report_html.html
+        target: 'https://www.zaproxy.org/'      # The target website to scan
