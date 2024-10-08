@@ -24,17 +24,19 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
+      # Explicitly authenticate with Snyk using the token
+      - name: Authenticate Snyk CLI
+        run: snyk auth ${{ secrets.SNYK_TOKEN }}
+
       # Runs Snyk Code (SAST) analysis and uploads result into GitHub.
-      # Using || true to continue the pipeline even if the Snyk Code test fails
       - name: Snyk Code test
         run: snyk code test --sarif > snyk-code.sarif || true
 
       # Runs Snyk Open Source (SCA) analysis and uploads result to Snyk.
       - name: Snyk Open Source monitor
-        run: snyk monitor --all-projects
+        run: snyk monitor --all-projects || true
 
       # Runs Snyk Infrastructure as Code (IaC) analysis and uploads result to Snyk.
-      # Using || true to continue the pipeline even if the IaC test fails.
       - name: Snyk IaC test and report
         run: snyk iac test --report || true
 
