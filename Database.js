@@ -12,7 +12,7 @@ import { IpFilter } from 'express-ipfilter';
 import ExpressBrute from 'express-brute';
 import MongoStore from 'express-brute-mongo';
 
-// SSL certificate paths (example)
+// SSL certificate paths
 const privateKey = fs.readFileSync('C:/Program Files/OpenSSL-Win64/bin/APDS.key', 'utf8');
 const certificate = fs.readFileSync('C:/Program Files/OpenSSL-Win64/bin/mycertificate.crt', 'utf8');
 

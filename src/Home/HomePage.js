@@ -3,7 +3,7 @@ import './HomePage.css';
 import BankLogo from '../images/BankLogo.png'; 
 import Image1 from '../images/SlideImage_1.jpg'
 import Image2 from '../images/SlideImage_2.jpeg'
-import Woody from '../images/woody.jpeg'
+import Image3 from '../images/Support.jpg'
 
 function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -20,7 +20,7 @@ function HomePage() {
       description: 'Security is paramount to our operations. With Rytech International, every transaction is guarded by advanced encryption protocols and fraud detection systems. We comply with global regulations and local standards, ensuring that all your payments are processed in line with the legal requirements of both the sending and receiving countries. Our SWIFT system integration ensures that your payments are safely routed through secure financial channels, minimizing the risk of delays or disruptions.'
     },
     {
-      image: Woody,
+      image: Image3,
       heading: 'Tailored Customer Support',
       description: 'Our team of experts is dedicated to supporting you throughout the payment process. Whether you need assistance setting up an international payment, understanding exchange rates, or managing payment histories, Rytech International offers round-the-clock support to ensure your experience is smooth and worry-free.'
     }
