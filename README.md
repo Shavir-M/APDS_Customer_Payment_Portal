@@ -1,3 +1,17 @@
+# Group menbers
+
+ST10238400 - Brandon
+
+ST10291606 - Aron
+
+ST10182788 - Shavir
+
+ST10091023 - Rylan
+
+ST10090803 - Quintin
+
+ST10088758 - Ross
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
