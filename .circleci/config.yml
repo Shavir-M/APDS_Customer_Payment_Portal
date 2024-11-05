@@ -12,24 +12,26 @@ jobs:
           command: |
             sudo apt update
             sudo apt install -y openjdk-17-jdk
-            export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-            export PATH=$JAVA_HOME/bin:$PATH
-            java -version # Verify Java 17 is set correctly
+            # Set JAVA_HOME and add Java 17 to PATH
+            echo 'export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64' >> $BASH_ENV
+            echo 'export PATH=$JAVA_HOME/bin:$PATH' >> $BASH_ENV
+            source $BASH_ENV
+            java -version # Verify that Java 17 is installed and set
       - run:
           name: Install SonarScanner
           command: |
             curl -sSLo sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
             unzip sonar-scanner-cli.zip -d $HOME
             echo 'export PATH=$PATH:$HOME/sonar-scanner-4.6.2.2472-linux/bin' >> $BASH_ENV
-            echo 'export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64' >> $BASH_ENV
+            source $BASH_ENV # Load environment variables for this step as well
       - run:
           name: Run SonarQube Analysis
           command: |
-            source $BASH_ENV
+            source $BASH_ENV # Ensure JAVA_HOME and PATH are loaded for SonarScanner
             sonar-scanner \
               -Dsonar.projectKey="Shavir-M_APDS_Customer_Payment_Portal" \
-              -Dsonar.host.url="${SONAR_HOST_URL}" \
-              -Dsonar.login="${SONAR_TOKEN}"
+              -Dsonar.host.url="https://sonarcloud.io" \
+              -Dsonar.login="9126743be08a165b08b7b97119c69b095b94067e"
 
 workflows:
   version: 2
