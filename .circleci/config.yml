@@ -3,10 +3,16 @@ version: 2.1
 jobs:
   sonar-analysis:
     docker:
-      - image: cimg/openjdk:17.0 # CircleCI image with Java 17
+      - image: cimg/base:current # or another image as needed
 
     steps:
-      - checkout # Checks out your code
+      - checkout
+      - run:
+          name: Install Java 17
+          command: |
+            sudo apt update
+            sudo apt install -y openjdk-17-jdk
+            java -version # Verify that Java 17 is installed
       - run:
           name: Install SonarScanner
           command: |
@@ -18,7 +24,7 @@ jobs:
           command: |
             sonar-scanner \
               -Dsonar.projectKey="Shavir-M_APDS_Customer_Payment_Portal" \
-              -Dsonar.host.url=" https://sonarcloud.io" \
+              -Dsonar.host.url="https://sonarcloud.io%22" \
               -Dsonar.login="9126743be08a165b08b7b97119c69b095b94067e"
 
 workflows:
