@@ -24,7 +24,7 @@ jobs:
           command: |
             sonar-scanner \
               -Dsonar.projectKey="Shavir-M_APDS_Customer_Payment_Portal" \
-              -Dsonar.host.url="https://sonarcloud.io%22" \
+              -Dsonar.host.url="https://sonarcloud.io" \
               -Dsonar.login="9126743be08a165b08b7b97119c69b095b94067e"
 
 workflows:
