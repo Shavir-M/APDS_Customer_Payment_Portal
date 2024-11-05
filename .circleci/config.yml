@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   sonar-analysis:
     docker:
-      - image: cimg/base:current # Adjust this if you need a different language image
+      - image: cimg/openjdk:17.0 # CircleCI image with Java 17
 
     steps:
       - checkout # Checks out your code
