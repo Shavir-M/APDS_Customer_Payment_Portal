@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   sonar-analysis:
     docker:
-      - image: cimg/base:current # You may need to adjust this based on your project's language
+      - image: cimg/base:current # Adjust this if you need a different language image
 
     steps:
       - checkout # Checks out your code
@@ -17,9 +17,9 @@ jobs:
           name: Run SonarQube Analysis
           command: |
             sonar-scanner \
-              -Dsonar.projectKey="Shavir-M_APDS_Customer_Payment_Portal" \
-              -Dsonar.host.url="${https://sonarcloud.io}" \
-              -Dsonar.login="${9126743be08a165b08b7b97119c69b095b94067e}"
+              -Dsonar.projectKey="your_project_key" \
+              -Dsonar.host.url="${SONAR_HOST_URL}" \
+              -Dsonar.login="${SONAR_TOKEN}"
 
 workflows:
   version: 2
