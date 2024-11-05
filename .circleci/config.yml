@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   sonar-analysis:
     docker:
-      - image: cimg/base:current # or another image as needed
+      - image: cimg/base:current # Use the base image you need
 
     steps:
       - checkout
@@ -12,7 +12,9 @@ jobs:
           command: |
             sudo apt update
             sudo apt install -y openjdk-17-jdk
-            java -version # Verify that Java 17 is installed
+            export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+            export PATH=$JAVA_HOME/bin:$PATH
+            java -version # Verify Java 17 is set correctly
       - run:
           name: Install SonarScanner
           command: |
@@ -22,6 +24,7 @@ jobs:
       - run:
           name: Run SonarQube Analysis
           command: |
+            source $BASH_ENV
             sonar-scanner \
               -Dsonar.projectKey="Shavir-M_APDS_Customer_Payment_Portal" \
               -Dsonar.host.url="${SONAR_HOST_URL}" \
