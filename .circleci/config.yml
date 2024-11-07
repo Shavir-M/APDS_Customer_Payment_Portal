@@ -14,7 +14,7 @@ jobs:
             sonar-scanner \
               -Dsonar.projectKey="Shavir-M_APDS_Customer_Payment_Portal" \
               -Dsonar.host.url="https://sonarcloud.io" \
-              -Dsonar.organization="your_organization_id" \
+              -Dsonar.organization=c27d78cf44fd539fec096c8f0d5cd1848a0a0dc1 \
               -Dsonar.login="$SONAR_TOKEN"
 workflows:
   version: 2
