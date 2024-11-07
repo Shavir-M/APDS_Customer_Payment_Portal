@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   sonar-analysis:
     docker:
-      - image: Rylan559/sonar-scanner-java17  
+      - image: rylan559/sonar-scanner-java17  
     steps:
       - checkout
       - run:
