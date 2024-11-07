@@ -3,32 +3,18 @@ version: 2.1
 jobs:
   sonar-analysis:
     docker:
-      - image: cimg/openjdk:17.0  # Use Java 17 image
+      - image: Rylan559/sonar-scanner-java17  
     steps:
       - checkout
       - run:
-          name: Verify Java 17
-          command: |
-            java -version  # Check Java version is 17
-            echo "Java Home: $JAVA_HOME"
-      - run:
-          name: Install SonarScanner
-          command: |
-            curl -sSLo sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
-            unzip sonar-scanner-cli.zip -d $HOME
-            echo 'export PATH=$PATH:$HOME/sonar-scanner-4.6.2.2472-linux/bin' >> $BASH_ENV
-            source $BASH_ENV
-      - run:
           name: Run SonarQube Analysis
           command: |
-            JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64 \
-            $HOME/sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner \
+            sonar-scanner \
               -Dsonar.projectKey="Shavir-M_APDS_Customer_Payment_Portal" \
               -Dsonar.host.url="https://sonarcloud.io" \
-              -Dsonar.organization="your_organization_id" \
+              -Dsonar.organization="shavir-m" \
               -Dsonar.login="$SONAR_TOKEN" \
-              -Dsonar.scanner.skipjreDownload=true \
-              -X  # Enable debug mode
+              -X  # Enable debug mode for detailed logs
 workflows:
   version: 2
   sonar-analysis-workflow:
