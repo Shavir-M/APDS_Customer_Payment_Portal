@@ -17,7 +17,7 @@ function AdminDashboard() {
     // Fetch payments every second
     const interval = setInterval(() => {
       fetchPayments();
-    }, 10000);
+    }, 20000);
  
     document.body.classList.add('dashboard-body');
  

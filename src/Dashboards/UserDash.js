@@ -24,7 +24,7 @@ function UserDash() {
     // Fetch payments every 1 second
     const interval = setInterval(() => {
       fetchPayments(userId);
-    }, 1000); // 1 second interval for real-time updates
+    }, 20000); // 10 second interval for real-time updates
 
     document.body.classList.add('dashboard-body');
 
