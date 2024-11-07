@@ -3,8 +3,14 @@ version: 2.1
 jobs:
   sonar-analysis:
     docker:
-      - image: rylan559/sonar-scanner-java17  
+      - image: rylan559/sonar-scanner-java17  # Use lowercase image name
     steps:
+      - setup_remote_docker:
+          version: 20.10.7
+      - run:
+          name: Docker Hub Login
+          command: |
+            echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
       - checkout
       - run:
           name: Run SonarQube Analysis
@@ -12,9 +18,9 @@ jobs:
             sonar-scanner \
               -Dsonar.projectKey="Shavir-M_APDS_Customer_Payment_Portal" \
               -Dsonar.host.url="https://sonarcloud.io" \
-              -Dsonar.organization="shavir-m" \
+              -Dsonar.organization="your_organization_id" \
               -Dsonar.login="$SONAR_TOKEN" \
-              -X  # Enable debug mode for detailed logs
+              -X
 workflows:
   version: 2
   sonar-analysis-workflow:
